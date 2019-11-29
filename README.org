@@ -383,18 +383,6 @@ async function getJSON (url, headline) {
     .catch(function(error){console.log(error);});
   }
 
-// let j = getJSON('data/pqt-in.csv', 2)
-//     .then( (json) => {
-//       // console.log(json);
-//       // console.log(processNOAAData(json, "wsp"));
-//     });
-// let k = getJSON('data/pqt-out.csv', 2)
-//     .then( (json) => {
-//       //console.log(json);
-//       //console.log(processNOAAData(json, "wvh"));
-//     });
-//console.log(j.then( (json) => console.log(json));
-
 function testGood (direction, spotMeta=abay) {
   let value = 'bad';
   spotMeta.directions
@@ -511,7 +499,7 @@ Two graphs stacked on top of each other, wave height and wind speed (both scalar
 - fill color above ~minHeight~ is different from below (which is probably unfilled)
 - ideally they share a single time axis
 
-** time Axis gneeration
+** time Axis generation
 a lot easier to use moment than native data objects! Hoping to do that.  
 
 ** Tooltips
@@ -527,11 +515,10 @@ It should be possible to:
 There are at least 2 possible data sources
 - NOAA/GLOS surface model point data endpoint, currently down, but providing high-quality data sources. Available only in CSV so needs to be parsed before it's fed to a map.
 - Windy data -- only possible from within a Windy plugin (!!) but provides an alternative to the GLOS model & has a longer-range forecast. cf [[https://www.chartjs.org/docs/latest/configuration/tooltip.html#external-custom-tooltips][my forum post]] and 
-* Processing csv to json
+** Processing csv to json
 
 - [[https://www.papaparse.com/docs#config][Papaparse]] is a pretty full-featured CSV translator that maybe should prelace my siplistic code (though maybe not!).
 - [[http://techslides.com/convert-csv-to-json-in-javascript][down-and-dirty csv converter]] (works for my case, though I also had to trim spaces fro mthe ends.
-* Promise chaining, enables, etc. 
+** Promise chaining, enables, etc. 
 - [[https://stackoverflow.com/questions/31264153/assign-value-from-successful-promise-resolve-to-external-variable][explanation of why vars set to ~then~ don't get the resolved value]] -- they're just the promise (drat!). Need to set it to promise.resolve instead, also need to wat for Promse.all(...)  before moving on.
 - [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all][Promise.all in MDN]]
-
