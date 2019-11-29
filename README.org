@@ -11,18 +11,119 @@ GET https://wateroffice.ec.gc.ca/services/real_time_graph/json/inline?station=02
 #+RESULTS: wateroffice
 [[file:wateroffice.json]]
 
-** Chart.js
+** [[https://www.chartjs.org/][Chart.js]]
+*** concerns
+Was somewhat daunting when I started but no longer looks all that hard:
 
+- in dataset, can use ~{x: date, y: value}~ array elements instead of scalars (the default in most examples)
+- *thresholds*
+  - [[https://stackoverflow.com/questions/42691873/draw-horizontal-line-on-chart-in-chart-js-on-v2][explanation of using chart.js annotation library]] to simulate the threhold/line funcitonality already working in chartist code below
+  - [[https://stackoverflow.com/questions/36916867/chart-js-line-different-fill-color-for-negative-point][much cooler & more powerful explanation of how you would modify the line chart type]] to change the fill gradients, by passing a threshold value.  The example uses just ~0~ but looksl ike it could really be anything. [[http://jsfiddle.net/g2r2q5Lu/][cf. jsFiddle]].
+  - another alternative is the cool-looking [[https://github.com/bbc/chart.bands.js][chart pands plugin]](not under active development), which can adjust line type etc according to y-value.  [[https://codepen.io/Tarqwyn/pen/QNzNVg][cf. codepen]].
+  - also look at new [[https://github.com/chartjs/Chart.js/blob/master/samples/advanced/line-gradient.html][line-gradient plugin]].
+  - [[https://stackoverflow.com/questions/35249498/how-to-change-line-segment-color-of-a-line-graph-in-chart-js][low-level code to redraw line segments]]; may not be trivial w/ dynamically-generated data sets. Would have to do the math first.  [[https://jsfiddle.net/egamegadrive16/zjdwr4fh/][jsFiddle]].
+  - [[https://stackoverflow.com/questions/52120036/chartjs-line-color-between-two-points][more manual intervention from stackoverflow]] -- still looks messy!
+- *tooltips*
+  - [[https://www.chartjs.org/samples/latest/scales/time/financial.html][this example has pretty good UI for tooltip]] -- uses ~intersect: false, mode:index~ and a callback to make the tooltips.
+  - [[https://www.chartjs.org/docs/latest/configuration/tooltip.html][tooltip docs are pretty extensive and interesting]].
+  - [[https://stackoverflow.com/questions/45159895/moving-vertical-line-when-hovering-over-the-chart-using-chart-js][cool example of how to extend line chart type to include a line that appearso n the graph on hover]] -- helps to show you where you are.  Note the comments about the issue with which tooltip gets activated -- need to set options.tooltips.axis to ~x~ on initializaiton of the chart. [[https://stackoverflow.com/questions/54990176/chart-js-vertical-line-when-hovering-and-shadow-on-line/55045517#55045517][another very similar question and cool implementation]]. 
+- *time axes*
+  - [[https://www.chartjs.org/samples/latest/scales/time/combo.html][timexcales using moment]]
+*** code 
 We'll use the file [[./chart-js.html]] for code
+#+begin_src css :tangle chart-js.css
+main: {display:flex; flex-direction:row; height: 75vh; width:100vh;justify-content:space-around;}
+section.chart-container { flex-basis:1fr;}
+canvas#myChart {max-width:100vw; max-height:80vh}
+#+end_src
+#+begin_src web :tangle chart-js.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Chart.js Data visualization</title>
+    <link href="chart-js.css" rel="stylesheet"/>
+    <script src="node_modules/chart.js/dist/Chart.bundle.js"></script>
+    <script src="js/noaaParser.js"></script>
+  </head>
+  <body>
+    
+    <main><section class="chart-container">
+        <canvas id="myChart"></canvas>
+    </section></main>
+<script>
+</script>
+    <script src="chartjs-lines.js"></script>
 
+  </body>
+</html>
+
+#+end_src
 #+begin_src js :tangle chartjs-lines.js
-console.log('hello');
-// Any of the following formats may be used
-const ctx = document.getElementById('myChart');
-// var ctx = document.getElementById('myChart').getContext('2d');
-// var ctx = $('#myChart');
-// var ctx = 'myChart';
-
+const ctx = document.getElementById('myChart').getContext('2d');
+const timeFormat = 'MM/DD - HH:mm';
+let myChart;
+async function loadMe () {
+let dataArray = await getJSON('data/pqt-out.csv', 2)
+    .then( (json) => {
+      // console.log(json);
+      // console.log(processNOAAData(json, "wsp"));
+      return processNOAAData(json);
+     });
+//console.log(j);
+const thisSpot = abay;
+ myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Wave Height in Meters',
+            data: dataArray, 
+            backgroundColor: 'red',
+	    borderColor: 'red',
+          fill: false, //true,
+            borderWidth: 1
+        }]
+    },
+     options: {
+         scales: {
+	   xAxes: [{
+	     type: 'time',
+	     display: true,
+	     time: {
+	       format: timeFormat,
+	       //round: 'hour'
+	     }
+	   }],
+         },
+       tooltips: {
+         backgroundColor: `rgba(0,0,0,0.5)`,
+	 intersect: false,
+	 mode: 'index',
+	 callbacks: {
+           //title: (item, data) => "I am a title",
+	   label: function(tooltipItem, myData) {
+             console.log("creating label");
+             console.log(tooltipItem);
+             let d = myData.datasets,
+                 i = tooltipItem.datasetIndex,
+                 dir = d[i].data[tooltipItem.index].direction ? `direction: <span class="arrow" style="${d[i].direction}">&darr;</span>` : ''; 
+                 arrow = ``;
+       console.log(d[i].data[tooltipItem.index]);
+	     var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+	     if (label) {
+	       label += ': ';
+	     }
+	     label += parseFloat(tooltipItem.value).toFixed(2);
+             label += dir;
+             console.log(label);
+	     return label;
+	   }
+	 }
+       }
+     }
+ });
+}
+loadMe();
 #+end_src
 
 see [[https://www.chartjs.org/docs/latest/getting-started/usage.html][getting started guide]] and [[https://www.chartjs.org/docs/latest/getting-started/usage.html][samples page]] for example code.
