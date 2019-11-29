@@ -364,4 +364,108 @@ function processNOAAData (raw,spotMeta=abay, yaxis=true) {
 }
 
 #+end_src
+* Design Considerations
+** Tooltips
+tooltips are hard to manage in more abstracted platforms like chrtist.  cf. [[https://github.com/tmmdata/chartist-plugin-tooltip/issues/157][make activation area wider]] for chartist; somewhat less clumsy [[https://c3js.org/samples/tooltip_format.html][in C3, but still a bit jumpy]]; [[https://bl.ocks.org/Qizly/5a78caaf03ed96757e72][way nicer in D3 directly]], but code is dramatically more complex.  [[http://bl.ocks.org/wdickerson/64535aff478e8a9fd9d9facccfef8929][another d3 example]] showing more complex HTML in tooltip.  [[https://www.chartjs.org/docs/latest/configuration/tooltip.html#external-custom-tooltips][Chart.js tooltips]] are extremely flexible by comparison. 
+** Arrows
+We can use wind direction to set the angle and color of a directional arrow in a tooltip. 
+- add ~<span class="arrow" style="--angle:345.17">&uarr;</span>~ to the tooltip
+- add ~transform:rotate(var(--angle)deg)~ to the css for that span
+- for colors, need to set a class of "good" bad" "shoulder" and set those colors in CSS
+- different frameworks have very different tooltip presents, will be complex to move from one library to another
+
+#+begin_src css :tangle arrows.css
+ :root {
+     --angle: 45deg;
+ }
+
+ body {
+     display: grid;
+     justify-items: space-around;
+     align-items: center;
+     margin-top: 200px;
+     align-content: center;
+     justify-content: space-around;
+ }
+ 
+div {
+  color: green;
+  font-size: 60px;
+  /* standard gradient background */
+  background: linear-gradient(red, blue);
+
+  /* clip hackery */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+ div.arrow {
+     transform: rotate(var(--angle))
+ }
+ 
+
+#+end_src
+
+#+begin_src html :tangle arrows.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Document</title>
+    <link href="arrows.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div class="arrow">
+      <span>&uarr;</span>
+    </div>
+
+  </body>
+</html>
+#+end_src
+
+* Designing A Wave/Wind Graph Set
+
+Ideally, for each spot we have a json object a little like this:
+#+begin_src json
+{
+  "name": "Ashbridge's Bay",
+  "lat":123.456,
+  "long": -456.789,
+  "directions": [[0,50,"bad"], [50,70,"shoulder"], [70,120,"good"],[120,150,"shoulder"],[150,360,"bad"]],
+  "minHeight": 0.85
+}
+#+end_src
+Where ~minHeight~ is in meters and directions are wind or wave directions in degrees from true North (lat/long are decimal degrees). 
+
+We then use ~minHeight~ to set the threshold for fill colors, and ~directions~ to color the tooltip elements & and of possible adjust fill colors above the height threshold.  
+
+** Graph Layout
+
+Two graphs stacked on top of each other, wave height and wind speed (both scalars). Ideally they still share a single axis.
+- fill color above ~minHeight~ is different from below (which is probably unfilled)
+- ideally they share a single time axis
+
+** time Axis gneeration
+a lot easier to use moment than native data objects! Hoping to do that.  
+
+** Tooltips
+Tooltips display *a directional arrow* (see "arrows" above for some HTML & CSS) along with the date-time value, and absolute magntude of the two points.  *color should be used to emphasize "good", "bad" or "shoulder" status of the directional data.
+
+** UI
+It should be possible to:
+- zoom the map to adjust timescale
+- use a slider to navigate the map & activate tooltips (better than just a mouseover for lots of reasons, e.g. could be used to control a windy map in tandem)
+- probably a few other things would be nice
+
+** Data Sources
+There are at least 2 possible data sources
+- NOAA/GLOS surface model point data endpoint, currently down, but providing high-quality data sources. Available only in CSV so needs to be parsed before it's fed to a map.
+- Windy data -- only possible from within a Windy plugin (!!) but provides an alternative to the GLOS model & has a longer-range forecast. cf [[https://www.chartjs.org/docs/latest/configuration/tooltip.html#external-custom-tooltips][my forum post]] and 
+* Processing csv to json
+
+- [[https://www.papaparse.com/docs#config][Papaparse]] is a pretty full-featured CSV translator that maybe should prelace my siplistic code (though maybe not!).
+- [[http://techslides.com/convert-csv-to-json-in-javascript][down-and-dirty csv converter]] (works for my case, though I also had to trim spaces fro mthe ends.
+* Promise chaining, enables, etc. 
+- [[https://stackoverflow.com/questions/31264153/assign-value-from-successful-promise-resolve-to-external-variable][explanation of why vars set to ~then~ don't get the resolved value]] -- they're just the promise (drat!). Need to set it to promise.resolve instead, also need to wat for Promse.all(...)  before moving on.
+- [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all][Promise.all in MDN]]
 
