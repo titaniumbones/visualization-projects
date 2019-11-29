@@ -223,30 +223,58 @@ async function getJSON (url, params ) {
   }
 
 async function buildChart () {
-  let woRaw = await getJSON('wateroffice.json', '')
-      .then ( (data ) => data["47"].provisional.map( (item) => {
-        let itemObj =  {x: new Date(item[0]), y: item[1]}; return itemObj;}) );
-  ;;let wo = woRaw;
+  const woRaw = await getJSON('wateroffice.json', '')
+        .then((data) => data["47"].provisional.map((item) => {
+        const itemObj =  { x: new Date(item[0]), y: item[1] }; return itemObj
+      }) )
+  let wo = woRaw
   //wo = woRaw["46"].provisional.map( (item) => { return {x: new Date(item[0]), y: item[1]};}); 
   console.log(wo);
-  let chart = new Chartist.Line('.ct-chart', {
+  chart = new Chartist.Line('.ct-chart', {
     series: [
       {name: 'actual-data',
        data: wo
       }
     ]
   }, {
+    showArea: true,
     axisX: {
       type: Chartist.FixedScaleAxis,
       divisor: 5,
       labelInterpolationFnc: function(value) {
         return moment(value).format('dd');
       }
-    }
+    },
+    targetLine: {
+      value: 5,
+      class: 'ct-target-line'
+  }
+  
   });
+
+  chart.on('created', function (context) {
+    console.log(context);
+    let targetLineY = projectY(context.chartRect, context.bounds, context.options.targetLine.value);
+
+    context.svg.elem('line', {
+        x1: context.chartRect.x1,
+        x2: context.chartRect.x2,
+        y1: targetLineY,
+        y2: targetLineY
+    }, context.options.targetLine.class);
+});
+
 }
-buildChart()
+
+function projectY(chartRect, bounds, value) {
+    return chartRect.y1 - (chartRect.height() / bounds.max * value)
+}
+
+
+
+buildChart();
 #+end_src
+
 ** [[https://gionkunz.github.io/chartist-js/examples.html][Chartist]] 2: using CSV data from the NOAA/GLOS point database
 
 
