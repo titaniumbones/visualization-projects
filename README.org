@@ -259,6 +259,20 @@ Jquery=based library. see [[https://www.flotcharts.org/flot/examples/][docs]]. U
 ** Cubism
 [[https://square.github.io/cubism/][also optimized for pullinganalytics from survers]], but with defaults close to what I'm looking for. 
 ** [[https://c3js.org/][C3.js]]
-meta library of D3, much easier to work with, in principle.  
+meta library of D3, much easier to work with, in principle. 
+- [[https://c3js.org/gettingstarted.html][getting started guide]]
+- [[https://c3js.org/examples.html][examples]]
+- [[https://c3js.org/samples/simple_regions.html][line segments, kind of nice]]
+- 
 ** [[https://canvasjs.com/javascript-charts/json-data-api-ajax-chart/][canvasjs]] -- might be nonfree
+** Windy 
+- Windy has a fairly rich API
+- it's pretty difficult to ineract with without building a map (!)
+- [[https://www.google.com/search?client=firefox-b-d&q=windy+api+get+forecast+value+at+point][google search]] (not that helpful)
+- [[https://github.com/windycom/API][API examples homeplge]]
+- [[https://api4.windy.com/examples/picker][activating the picker]] -- could be possible to add content to picker? don't know.
+- [[https://github.com/windycom/windy-plugins/blob/master/docs/WINDY_API.md#module-plugindataloader][description of ~pluginDataLoader~ module form windy plugin API]] -- this is where you could get point-specific data
+- [[https://api4.windy.com/api-key][link to API key]]
+- note: the plugins can be pretty cool, need to figure out how to add them to default display!
+- [[file:///home/matt/src/visualization-projects/windy-api-examples/picker/index.html][my code to try to get access to the backend API directly without instantiating the map (!)]]
 
