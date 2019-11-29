@@ -12,21 +12,13 @@
         <link rel="stylesheet"
               href="chartist-line-noaa.css">
         <style>
-          main#main {
-          margin-top: 150px;
-          display: flex;
-          max-height: 400px;
-          grid-column-template: 1fr 1fr 1fr;
-          justify-content: space-around
-          }
         </style>
   </head>
   <body>
     <!-- Site content goes here !-->
     <main id="main">
-      <div class="filler"></div>
-      <div class="ct-chart ct-perfect-fourth"></div>
-      <div class="filler"></div>
+      <div class="ct-chart ct-perfect-fourth" id="waves-chart"></div>
+      <div class="ct-chart ct-perfect-fourth" id="winds-chart"></div>
     </main>
     <!-- <script src="wateroffice.js"></script> -->
     <script src="js/noaaParser.js"></script>
