@@ -13,6 +13,25 @@ This is just a sandbox for now. If for some reason you want to try it out, clone
 * Contributing
 
 umm... source code is all ocntained in org-mode source blocks for now. Would be hard for most people to deal with that setup! May switch later once I start to understand these frameworks better/settle on one in particular.  
+* List of generated files (incomplete)
+Sorry, this is maintained by hand (!)
+
+#+begin_src web :tangle index.html
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+    </head>
+    <body>
+        <ul>
+            <li><a href="chartist-line-noaa.html">Chartist graph with NOAA data</a></li>
+        </ul>
+
+        
+    </body>
+</html>
+#+end_src
 * Experiments with curl and  vis libraries
 ** Restclient: get some data going
 #+NAME: wateroffice
