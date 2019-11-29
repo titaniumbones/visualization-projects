@@ -1,7 +1,7 @@
 * [[https://gionkunz.github.io/chartist-js/examples.html][Chartist]] 2: using CSV data from the NOAA/GLOS point database
 
-Proof-of-concept graph of data from 
-
+** Intro
+Proof-of-concept graph of data from NOAA's temporarily-out-of-service point forecast API
 
 Some basic thoughts:
 
@@ -14,9 +14,9 @@ Some basic thoughts:
   - not trivial to pass HTML to the tooltip, though it can be overcome by passing a function name [[https://github.com/tmmdata/chartist-plugin-tooltip#available-options-and-their-defaults][to the tooltipFnc options property]] on plugin initialization. The function takes towo parameters: *meta*, the value of the meta property, and *value*, the y-value. This turns out to be pretty inflexible, and probably rules out chartist for our purposes (sad b/c it was so easy to work with).
   - [[https://github.com/tmmdata/chartist-plugin-tooltip/pulls][lotso f outstanding PR's]] and [[https://github.com/tmmdata/chartist-plugin-tooltip/issues][issues]], doesn't appear to be very actively maintained.
 - *thresholds/line segments*: If I really want to  use color to represent direction, then instead of threshold I have to use some kind of custom plugin -- I can write it! -- that deserializes meta and takes a value map on the  ~quality~~ property, then uses that to do the smae thing asthreshold (clone element & mask). I can't quite understand the threshold code, so would have to investigate further, but looks possible.  Note that all this work is done in the *on: draw* phase of chart construction, cf. https://gionkunz.github.io/chartist-js/getting-started.html#colour-up-your-charts, dynamic coloring
+** CSS
 
-
-#+begin_src css :tangle chartist-line.css
+#+begin_src css :tangle chartist-line-noaa.css
 :root {
    --bad-value: #f05b4f;
    --good-value: #59922b;
@@ -100,7 +100,7 @@ pointer-events: none;
 
 
 #+end_src
-
+** HTML
 #+begin_src html :tangle chartist-line-noaa.html
 <!doctype html>
 <html>
@@ -114,7 +114,7 @@ pointer-events: none;
         <link rel="stylesheet"
            href="bower_components/chartist-plugin-threshold/dist/chartist-plugin-threshold.css">
         <link rel="stylesheet"
-              href="chartist-line.css">
+              href="chartist-line-noaa.css">
         <style>
           main#main {
           margin-top: 150px;
@@ -143,6 +143,9 @@ pointer-events: none;
 </html>
 
 #+end_src
+
+** JS
+
 #+begin_src js :tangle chartist-line-noaa.js
 const thisSpot = abay
 function generateTooltip (meta, value) {

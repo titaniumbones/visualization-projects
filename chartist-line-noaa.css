@@ -1,0 +1,80 @@
+:root {
+   --bad-value: #f05b4f;
+   --good-value: #59922b;
+   --shoulder-value: yellow;
+   --too-small: grey;
+}
+/* Use this selector to override the line style on a given series */
+.ct-series-a .ct-line {
+  /* Set the colour of this series line */
+  stroke:blue;
+  /* Control the thikness of your lines */
+  stroke-width: 5px;
+  /* Create a dashed line with a pattern */
+  // stroke-dasharray: 4px 8px;
+}
+
+/* This selector overrides the points style on line charts. Points on line charts are actually just very short strokes. This allows you to customize even the point size in CSS */
+.ct-series-a .ct-point {
+  /* Colour of your points */
+  stroke:red;
+  /* Size of your points */
+  stroke-width: 10px;
+  /* Make your points appear as squares */
+  /* stroke-linecap: square; */
+}
+ .ct-target-line {
+    stroke: var(no-surf);
+    stroke-width: 2px;
+    stroke-dasharray: 4px;
+    shape-rendering: crispEdges;
+}
+
+ /* threshold */
+ .ct-line.ct-threshold-above, .ct-point.ct-threshold-above, .ct-bar.ct-threshold-above {
+     stroke: var(--good-value);
+ }
+
+ .ct-line.ct-threshold-below, .ct-point.ct-threshold-below, .ct-bar.ct-threshold-below {
+     stroke: var(--too-small);
+ }
+
+ .ct-area.ct-threshold-above {
+     fill: var(--good-value);
+ }
+
+ .ct-area.ct-threshold-below {     
+     fill: var(--too-small);
+ }
+
+ /* arrows */
+.chartist-tooltip div.container {
+   padding: 10px;
+   opacity:0.8;
+}
+.chartist-tooltip .bad {
+   background-color: var(--bad-value);
+}
+.chartist-tooltip .good {
+   background-color: var(--good-value);
+}
+
+.chartist-tooltip .shoulder {
+   background-color: var(--shoulder-value);
+}
+
+.chartist-tooltip {
+background-color: unset }
+
+.arrow {
+transform:rotate(calc(var(--direction)*1deg));
+display:inline-block;
+}
+
+.no-surf {
+stroke: var(--no-surf);
+fill: var(--no-surf);
+opacity: 0.2;
+pointer-events: none;
+}
+/* background */
