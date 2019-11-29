@@ -1,5 +1,4 @@
-* Experiments
-
+* Experiments with curl and  vis libraries
 ** Restclient: get some data going
 #+NAME: wateroffice
 #+begin_src restclient :results file :exports results :file-ext json
