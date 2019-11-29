@@ -40,18 +40,6 @@ async function getJSON (url, headline) {
     .catch(function(error){console.log(error);});
   }
 
-// let j = getJSON('data/pqt-in.csv', 2)
-//     .then( (json) => {
-//       // console.log(json);
-//       // console.log(processNOAAData(json, "wsp"));
-//     });
-// let k = getJSON('data/pqt-out.csv', 2)
-//     .then( (json) => {
-//       //console.log(json);
-//       //console.log(processNOAAData(json, "wvh"));
-//     });
-//console.log(j.then( (json) => console.log(json));
-
 function testGood (direction, spotMeta=abay) {
   let value = 'bad';
   spotMeta.directions
@@ -64,16 +52,20 @@ function testGood (direction, spotMeta=abay) {
   return value
 }
 
-function processNOAAData (raw,spotMeta=abay, yaxis=true) {
-  
+function processNOAAData (raw,spotMeta=abay, yaxis=true) {  
   return raw.map((item) => {
-    console.log( ( item.wvd ?  (item.wvd + 180) % 360 : item.wdir) );
-    item.quality = testGood(item.wvd ? (item.wvd + 180) % 360 : item.wdir);
+    item.wvd = Number(item.wvd);
+    item.direction = item.wvd ? (Number(item.wvd) + 180) % 360 : Number(item.wdir);
+    console.log(item.wvd);
+    console.log ( item.wvd ? (item.wvd + 180)  : item.wdir )
+    console.log( (item.wvd ? "WVD: " : "WDIR: " ) + ( item.wvd ?  (item.wvd + 180) % 360 : item.wdir)  );
+    item.quality = testGood(item.direction);
+    item.direction = Math.trunc(item.direction);
     const itemObj =  { x: new Date(item["Date String"]),
                        y: item.wvh || item.wsp,
-                       wvd: item.wvd,
-                       wdir: item.wdir,
-                       direction: Math.trunc (item.wvd),
+                       // wvd: item.wvd,
+                       // wdir: item.wdir,
+                       // direction: (item.wvd ? ((item.wvd + 180) % 360) : item.wdir),
                        //direction: Math.trunc( (item.wvd ?  (item.wvd + 180) % 360 : item.wdir) ),
                        //meta: `<span class='arrow' style="--direction:${Math.trunc(item.wvd || item.wdir)}">&uarr;</span>`
                        meta: item
