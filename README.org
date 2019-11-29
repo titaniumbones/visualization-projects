@@ -128,7 +128,16 @@ loadMe();
 
 see [[https://www.chartjs.org/docs/latest/getting-started/usage.html][getting started guide]] and [[https://www.chartjs.org/docs/latest/getting-started/usage.html][samples page]] for example code.
 
-** [[https://gionkunz.github.io/chartist-js/examples.html][Chartist]]
+** [[https://gionkunz.github.io/chartist-js/examples.html][Chartist]] 1: using river gauge data
+
+Some basic thoughts:
+
+- graphing wateroffice data turns out to be easy once it's available: convert unix date-time to javascript Date object & graph. Improvements might include:
+- use either `target-line` or maybe better, ~threshold~ plugin to identify periods of navigability.  cf. descriptions and examples on [[https://gionkunz.github.io/chartist-js/plugins.html][plugins page]].
+- tooltips plugin is a little less awesome than other frameworks:
+  - no touch support!!
+  - tooltips only show up on mouseover of *points*, not of areas.  This will be a real pain in these graphs.  
+
 
 #+begin_src css :tangle chartist-line.css
 /* Use this selector to override the line style on a given series */
@@ -149,6 +158,12 @@ see [[https://www.chartjs.org/docs/latest/getting-started/usage.html][getting st
   stroke-width: 3px;
   /* Make your points appear as squares */
   /* stroke-linecap: square; */
+}
+ .ct-target-line {
+    stroke: var(--no-surf);
+    stroke-width: 2px;
+    stroke-dasharray: 4px;
+    shape-rendering: crispEdges;
 }
 #+end_src
 
@@ -188,7 +203,8 @@ see [[https://www.chartjs.org/docs/latest/getting-started/usage.html][getting st
 #+end_src
 #+begin_src js :tangle chartist-line.js
 let woURL = `https://wateroffice.ec.gc.ca/services/real_time_graph/json/inline?`,
-    params = `station=02HB029&start_date=2019-11-14&end_date=2019-11-22&param1=46&param2=47`
+    params = `station=02HB029&start_date=2019-11-14&end_date=2019-11-22&param1=46&param2=47`,
+    chart;
 function gWO (rawData) {
   let processed = rawData["46"].provisional.map( (item) => { return {x: new Date(item[0]), y: item[1]};});
   console.log(processed);
