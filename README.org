@@ -1,3 +1,18 @@
+* Visualization Test Projects
+A collection of small scripts, web pages, and other files related to experiments visualizing data, mostly meteorological data relating to surfing and paddling: 
+- wave and wind forecasts from the GLOS surface model point forecast (for surfing). This is a single endpoint which actually returns data from two distinct models: the "input" atmospheric forcing model (maybe thi comes from US weather service?), and the "output" surface model, which includes wave height, direction, period, etc., as well as current speed & direction
+- historical (i.e.,  up-until-the-present-moment) river gauge data, so far only from the Canadian wateroffice, mostly useful for whitewater kayaking.  
+
+So far, I'm mostly interested in single-variable time series graphs of wind/wave/flow amplitude, with wind/wave direction added in a tooltip. Trying to use color as a rough predictor of surf quality, but it's a bit lame so far. 
+
+Using all these different libraries to fool around.  The rest of this file consists mostly of annotated source code for immature projects; as they get more mature, I'll fix them up.  
+
+* Installation
+This is just a sandbox for now. If for some reason you want to try it out, clone this repo and then run ~npm install~ and ~bower install~ (I know, I know, it's ridiculous). Then play with the examples.    
+
+* Contributing
+
+umm... source code is all ocntained in org-mode source blocks for now. Would be hard for most people to deal with that setup! May switch later once I start to understand these frameworks better/settle on one in particular.  
 * Experiments with curl and  vis libraries
 ** Restclient: get some data going
 #+NAME: wateroffice
