@@ -1,0 +1,23 @@
+{
+  "name": "visualization-projects",
+  "description": "Just a playground for various experiments",
+  "main": "index.js",
+  "authors": [
+    "Matt Price"
+  ],
+  "license": "GPL-3.0-or-later",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chartist": "^0.11.4",
+    "chartist-plugin-tooltip": "^0.0.18",
+    "chartist-plugin-threshold": "^0.0.2",
+    "c3": "^0.7.11"
+  }
+}
