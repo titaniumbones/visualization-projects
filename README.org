@@ -523,3 +523,39 @@ There are at least 2 possible data sources
 ** Promise chaining, enables, etc. 
 - [[https://stackoverflow.com/questions/31264153/assign-value-from-successful-promise-resolve-to-external-variable][explanation of why vars set to ~then~ don't get the resolved value]] -- they're just the promise (drat!). Need to set it to promise.resolve instead, also need to wat for Promse.all(...)  before moving on.
 - [[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all][Promise.all in MDN]]
+* Chartist Plugin: Meta Line Segmenter
+
+I want to be able to add a class to points and lines where meta property contains values that fall in various ranges.  The Threshold plugin does this with a single value, and that works fine, but he method can't be trivially extended to my usecase b/c:
+1. it uses values, not meta values, and
+2. it draws two horizontal boxes, so there's no way to make vertically-oriented area stripes below the lines.
+
+Here's an attempt.
+
+#+begin_src js
+function ctPointLabels(options) {
+  return function ctPointLabels(chart) {
+    var defaultOptions = {
+      labelClass: 'ct-label',
+      labelOffset: {
+        x: 0,
+        y: -10
+      },
+      textAnchor: 'middle'
+    };
+
+    options = Chartist.extend({}, defaultOptions, options);
+
+    if(chart instanceof Chartist.Line) {
+      chart.on('draw', function(data) {
+        if(data.type === 'point') {
+          data.group.elem('text', {
+            x: data.x + options.labelOffset.x,
+            y: data.y + options.labelOffset.y,
+            style: 'text-anchor: ' + options.textAnchor
+          }, options.labelClass).text(data.value);
+        }
+      });
+    }
+  }
+}
+#+end_src
