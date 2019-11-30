@@ -346,6 +346,7 @@ let abay = {
   "lat":123.456,
   "long": -456.789,
   "directions": [[0,10,"bad"], [10,30,"shoulder"], [30,150,"good"],[150,180,"shoulder"],[180,360,"bad"]],
+  "qualityPeaks": [ [0,"bad"], [85, "good"], [170, "bad"], [290, "bad"] ],
   "minHeight": 0.85
 }
 
