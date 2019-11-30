@@ -12,7 +12,7 @@ function noaaCsvToJSON(csv, h=2){
   var result = [];
   var headers=lines[h].split(",");
   headers = headers.map(s => s.trim());
-  console.log(headers);
+  //console.log(headers);
   for(var i= h+1 ; i<lines.length - 1;i++) {
     let  obj = {};
     let currentline=lines[i].split(",");
@@ -45,10 +45,10 @@ function testGood (direction, spotMeta=abay) {
   spotMeta.directions
     .some( function (d)  {
       if ( (d[0] < direction) && ( direction < d[1])  ) {
-            console.log(d);
+           // console.log(d);
         value = d[2]; return; }
     });
-  console.log(value)
+  //console.log(value)
   return value
 }
 
@@ -56,13 +56,13 @@ function processNOAAData (raw,spotMeta=abay, yaxis=true) {
   return raw.map((item) => {
     item.wvd = Number(item.wvd);
     item.direction = item.wvd ? (Number(item.wvd) + 180) % 360 : Number(item.wdir);
-    console.log(item.wvd);
-    console.log ( item.wvd ? (item.wvd + 180)  : item.wdir )
-    console.log( (item.wvd ? "WVD: " : "WDIR: " ) + ( item.wvd ?  (item.wvd + 180) % 360 : item.wdir)  );
+    //console.log(item.wvd);
+    //console.log ( item.wvd ? (item.wvd + 180)  : item.wdir )
+    //console.log( (item.wvd ? "WVD: " : "WDIR: " ) + ( item.wvd ?  (item.wvd + 180) % 360 : item.wdir)  );
     item.quality = testGood(item.direction);
     item.direction = Math.trunc(item.direction);
     const itemObj =  { x: new Date(item["Date String"]),
-                       y: item.wvh || item.wsp,
+                       y: item.wvh || (item.wsp * 3.6 ),
                        // wvd: item.wvd,
                        // wdir: item.wdir,
                        // direction: (item.wvd ? ((item.wvd + 180) % 360) : item.wdir),
