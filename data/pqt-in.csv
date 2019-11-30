@@ -1,7 +1,6 @@
 2019 329 999 fcast o       8      11      43.6628     -79.3027
 MM/DD/YYYY hh:mm (GMT), Decimal DOY (GMT), Eastward Air Velocity (10m m/s), Northward Air Velocity (10m m/s), Wind Speed (m/s), Wind Dir (degrees; 0=from N; 90=from E), Air Temperature (2m C), Dew Point (2m C), Cloud cover (fraction)
 Date String, DOY, air_u, air_v, wsp, wdir, at, dp, cl
-11/25/2019 12:00,  329.500,    3.440,    2.887,    4.491,  230.000,    4.385,    0.550,    0.800
 11/25/2019 13:00,  329.542,    2.716,    2.279,    3.546,  230.000,    3.796,    1.085,    0.810
 11/25/2019 14:00,  329.583,    1.922,    1.664,    2.542,  229.105,    4.450,    1.275,    0.820
 11/25/2019 15:00,  329.625,    1.372,    1.494,    2.029,  222.567,    5.485,    1.800,    0.830
