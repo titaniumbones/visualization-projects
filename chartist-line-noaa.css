@@ -1,7 +1,7 @@
 :root {
     --bad-value: #f05b4f;
     --good-value: #59922b;
-    --shoulder-value: yellow;
+    --shoulder-value: rgb(40,125,125);
     --too-small: grey;
     box-sizing: border-box;
 }
@@ -109,3 +109,37 @@ main#main {
     pointer-events: none;
 }
 /* background */
+
+/* Segments!!!! */
+.ct-segment-shoulder .ct-point, .ct-segment-shoulder .ct-line {
+    stroke: var(--shoulder-value);
+    /* fill: var(--shoulder-value); */
+}
+
+.ct-segment-good .ct-point, .ct-segment-good .ct-line {
+    stroke: var(--good-value);
+    /* fill: var(--good-value); */
+}
+.ct-segment-bad .ct-point, .ct-segment-bad .ct-line {
+    stroke: var(--bad-value);
+    /* fill: var(--bad-value); */
+}
+
+.ct-segment-bad  .ct-area {
+    fill: var(--bad-value);
+}
+
+
+.ct-segment-good  .ct-area {
+    fill: var(--good-value);
+}
+.ct-segment-shoulder  .ct-area {
+    fill: var(--shoulder-value);
+}
+
+/* testing */
+
+div.filler {
+min-height: 300px;
+background-color: (red, green);
+}
